@@ -8,6 +8,7 @@ const connectDB = async () => {
       // Avoid deprecated methods
       useNewUrlParser: true,
       useUnifiedTopology: true,
+      useCreateIndex: true,
     });
     console.log('MongoDB Connected...');
   } catch (err) {
