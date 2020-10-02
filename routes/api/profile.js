@@ -206,7 +206,7 @@ router.put(
     try {
       const profile = await Profile.findOne({ user: req.user.id });
 
-      // Adds to the beggining, oposite of .push
+      // Adds the experience to the beggining, oposite of .push
       profile.experience.unshift(newExp);
 
       await profile.save();
@@ -218,5 +218,114 @@ router.put(
     }
   }
 );
+
+// @route   DELETE api/profile/experience/:experience_id
+// @desc    Deletes profile experience
+// @access  Private
+
+router.delete('/experience/:exp_id', auth, async (req, res) => {
+  try {
+    const profile = await Profile.findOne({ user: req.user.id });
+
+    // Get the remove index
+    const removeIndex = profile.experience
+      .map((item) => item.id)
+      .indexOf(req.params.exp_id);
+
+    console.log(removeIndex);
+
+    profile.experience.splice(removeIndex, 1);
+
+    await profile.save();
+
+    res.json(profile);
+  } catch (err) {
+    res.status(500).send('Server error deleting experience...');
+  }
+});
+
+// @route   PUT api/profile/education
+// @desc    Add profile education
+// @access  Private
+router.put(
+  '/education',
+  [
+    auth,
+    [
+      check('school', 'School is required').notEmpty(),
+      check('location', 'Location is required').notEmpty(),
+      check('degree', 'Degree is required').notEmpty(),
+      check('fieldofstudy', 'Field of study is required').notEmpty(),
+      check('from', 'From date is required').notEmpty(),
+    ],
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array });
+    }
+
+    const {
+      school,
+      location,
+      degree,
+      fieldofstudy,
+      from,
+      to,
+      current,
+      description,
+    } = req.body;
+
+    // Create a new object with the data that user submits
+    // it could be school: school, degree: degree. We don't need that because names are the same
+    const newEdu = {
+      school,
+      location,
+      degree,
+      fieldofstudy,
+      from,
+      to,
+      current,
+      description,
+    };
+
+    try {
+      const profile = await Profile.findOne({ user: req.user.id });
+
+      // Adds the education to the beggining, oposite of .push
+      profile.education.unshift(newEdu);
+
+      await profile.save();
+
+      res.json(profile);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server error adding education...');
+    }
+  }
+);
+
+// @route   DELETE api/profile/education/:education_id
+// @desc    Deletes profile education
+// @access  Private
+
+router.delete('/education/:edu_id', auth, async (req, res) => {
+  try {
+    const profile = await Profile.findOne({ user: req.user.id });
+
+    // Get the remove index
+    const removeIndex = profile.education
+      .map((item) => item.id)
+      .indexOf(req.params.exp_id);
+
+    profile.education.splice(removeIndex, 1);
+
+    await profile.save();
+
+    res.json(profile);
+  } catch (err) {
+    res.status(500).send('Server error deleting education...');
+  }
+});
 
 module.exports = router;
