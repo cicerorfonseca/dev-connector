@@ -1,4 +1,6 @@
 {
   "mongoURI": "mongodb+srv://cicero_devconnector:ydZXNw346Bz4unM@devconnector.0fpo6.mongodb.net/devconnector?retryWrites=true&w=majority",
-  "jwsSecret": "mysecrettoken"
+  "jwsSecret": "mysecrettoken",
+  "githubClientId": "9521ab1ad7a53b0ca95a",
+  "githubSecret": "8ccbe94fe90c12d968643fd43ea169e66cc8299d"
 }
