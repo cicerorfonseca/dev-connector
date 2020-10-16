@@ -36,7 +36,7 @@ export const createProfile = (formData, history, edit = false) => async (
       },
     };
 
-    const res = await axios.post('/api/profile/', formData, config);
+    const res = await axios.post('/api/profile', formData, config);
 
     // res.data here is the actual profile received by axios.post
     dispatch({
@@ -44,7 +44,7 @@ export const createProfile = (formData, history, edit = false) => async (
       payload: res.data,
     });
 
-    dispatch(setAlert(edit ? 'Profile Updated' : 'Profile Created'));
+    dispatch(setAlert(edit ? 'Profile Updated' : 'Profile Created', 'success'));
 
     // In an action I can't use <Redirect /> like we did in components
     // need to use the history object which has the push method on it
